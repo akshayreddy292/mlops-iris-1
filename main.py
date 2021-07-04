@@ -23,6 +23,7 @@ class QueryIn(BaseModel):
 # class which is returned in the response
 class QueryOut(BaseModel):
     flower_class: str
+    time_stamp: datetime.datetime
 
 # class which is expected in the payload while re-training
 class FeedbackIn(BaseModel):
@@ -46,7 +47,7 @@ def ping():
 # Response: QueryOut containing the flower_class predicted (200)
 def predict_flower(query_data: QueryIn):
     ct = datetime.datetime.now()
-    output = {"flower_class": predict(query_data), "timestamp": ct}
+    output = {"flower_class": predict(query_data), "time_stamp": ct}
     return output
 
 @app.post("/feedback_loop", status_code=200)
