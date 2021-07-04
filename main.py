@@ -23,7 +23,7 @@ class QueryIn(BaseModel):
 # class which is returned in the response
 class QueryOut(BaseModel):
     flower_class: str
-    timestamp: datetime.datetime
+    timestamp: str
 
 # class which is expected in the payload while re-training
 class FeedbackIn(BaseModel):
@@ -37,8 +37,8 @@ class FeedbackIn(BaseModel):
 @app.get("/ping")
 # Healthcheck route to ensure that the API is up and running
 def ping():
-    ct = datetime.datetime.now()
-    return {"ping": "ping", "timestamp": ct}
+    ct = datetime.datetime.now().strftime('%d-%B-%y %H:%M')
+    return {"ping": "pong", "timestamp": ct}
 
 
 @app.post("/predict_flower", response_model=QueryOut, status_code=200)
@@ -46,7 +46,7 @@ def ping():
 # Payload: QueryIn containing the parameters
 # Response: QueryOut containing the flower_class predicted (200)
 def predict_flower(query_data: QueryIn):
-    ct = datetime.datetime.now()
+    ct = datetime.datetime.now().strftime('%d-%B-%y %H:%M')
     output = {"flower_class": predict(query_data), "timestamp": ct}
     return output
 
@@ -56,7 +56,7 @@ def predict_flower(query_data: QueryIn):
 # Response: Dict with detail confirming success (200)
 def feedback_loop(data: List[FeedbackIn]):
     retrain(data)
-    ct = datetime.datetime.now()
+    ct = datetime.datetime.now().strftime('%d-%B-%y %H:%M')
     return {"detail": "Feedback loop successful", "timestamp": ct}
 
 
